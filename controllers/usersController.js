@@ -14,7 +14,11 @@ const loginUser = async (req, res) => {
     return res.status(400).json({ success: false, message: "Invalid credentials!", error: "Authentication Failed" });
   }
   const token = jwt.sign({ email: user.email, username: user.username, role: user.role }, process.env.JWT_SECRET);
-  res.cookie("token", token, { httpOnly: true, });
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
   return res.status(200).json({ success: true, message: "Welcome Back!", data: { token, username: user.username, email: user.email, role: user.role } });
 };
 
@@ -29,7 +33,11 @@ const signupUser = async (req, res, next) => {
   const user = await newUser.save();
   // Generate token and Set cookie
   const token = jwt.sign({ email, username, role: user.role }, process.env.JWT_SECRET);
-  res.cookie("token", token, { httpOnly: true, });
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+  });
   return res.status(201).json({ success: true, message: "Account Created Successfully!", data: { token, username: user.username, email: user.email, role: user.role } });
 };
 
