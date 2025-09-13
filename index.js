@@ -21,7 +21,7 @@ app.use(cors({
 
 
 //connect db
-mongoose.connect('mongodb://127.0.0.1:27017/Library')
+mongoose.connect(process.env.MONGODB_URL)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("Connection Failed:", err));
 
