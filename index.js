@@ -26,7 +26,7 @@ if (cluster.isPrimary) {
   });
 
 } else {
-  
+
   // Worker processes
   const app = express();
 
@@ -46,11 +46,13 @@ if (cluster.isPrimary) {
     .then(() => console.log(`MongoDB connected (Worker ${process.pid})`))
     .catch((err) => console.log("Connection Failed:", err));
 
+
+  // Routes
   const booksRoute = require("./routes/books");
   const usersRoute = require("./routes/users");
   const issueRoute = require("./routes/issues");
 
-  // Routes
+  
   app.get("/", (req, res, next) => {
     return res.json({ message: "Welcome to the Library API!" });
   });
