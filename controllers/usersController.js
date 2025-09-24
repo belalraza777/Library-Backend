@@ -13,7 +13,7 @@ const loginUser = async (req, res) => {
   if (!matchPassword) {
     return res.status(400).json({ success: false, message: "Invalid credentials!", error: "Authentication Failed" });
   }
-  const token = jwt.sign({ email: user.email, username: user.username, role: user.role }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user._id, username: user.username, role: user.role }, process.env.JWT_SECRET);
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
@@ -32,7 +32,7 @@ const signupUser = async (req, res, next) => {
   const newUser = new User({ username, email, password: hash });
   const user = await newUser.save();
   // Generate token and Set cookie
-  const token = jwt.sign({ email, username, role: user.role }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user._id, username, role: user.role }, process.env.JWT_SECRET);
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
@@ -75,7 +75,7 @@ const checkUser = (req, res) => {
 const resetPassword = async (req, res) => {
   try {
     const { oldPassword, newPassword } = req.body;
-    const user = await User.findOne({ email: req.user.email });
+    const user = await User.findById(req.user.id);
 
     if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });

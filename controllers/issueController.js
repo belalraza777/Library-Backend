@@ -72,7 +72,7 @@ const issueBook = async (req, res) => {
 
 //rented book by a user
 const mybooks = async (req, res) => {
-  const user = await User.findOne({ email: req.user.email }).populate({
+  const user = await User.findById(req.user.id).populate({
     //nested populate
     path: "issuedBooks",
     populate: {
