@@ -1,6 +1,5 @@
 require("dotenv").config();
 const express = require("express");
-const methodOverride = require("method-override");
 const mongoose = require("mongoose");
 const ErrorHandle = require("./utils/errorClass");
 const cookieParser = require("cookie-parser");
@@ -12,7 +11,6 @@ const app = express();
 // Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(methodOverride("_method"));
 app.use(express.static("public"));
 app.use(cookieParser());
 
@@ -43,7 +41,7 @@ app.use("/api/users", usersRoute);
 app.use("/api/issues", issueRoute);
 
 // Unknown Route
-app.use("*", (req, res, next) => {
+app.use((req, res, next) => {
   next(new ErrorHandle(404, "Page not Found"));
 });
 
